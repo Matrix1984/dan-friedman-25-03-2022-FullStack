@@ -32,6 +32,7 @@ namespace Api.Controllers
         public async Task<IActionResult> SearchByName(string searchCity)
         {
             LocationSearchResponseDTO locationSearchResponseDTO = null;
+
             if (String.IsNullOrWhiteSpace(searchCity))
                 return BadRequest();
 
