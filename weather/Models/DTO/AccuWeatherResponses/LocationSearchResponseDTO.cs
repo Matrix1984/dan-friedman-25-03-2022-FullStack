@@ -5,14 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Models.DTO.AccuWeatherResponses
-{
+{ 
     public class LocationSearchResponseDTO
-    {
-        public Location[] Locations { get; set; }
-    }
-     
-
-    public class Location
     {
         public int Version { get; set; }
         public string Key { get; set; }

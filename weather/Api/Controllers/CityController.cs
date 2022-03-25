@@ -35,7 +35,7 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<IActionResult> SearchByName(string searchCity)
         {
-            LocationSearchResponseDTO locationSearchResponseDTO = null;
+            IEnumerable<LocationSearchResponseDTO> locationSearchResponseDTO = null;
 
             if (String.IsNullOrWhiteSpace(searchCity))
                 return BadRequest();
@@ -50,7 +50,7 @@ namespace Api.Controllers
                 try
                 {
                     locationSearchResponseDTO = await JsonSerializer.DeserializeAsync
-                             <LocationSearchResponseDTO>(contentStream);
+                             <IEnumerable<LocationSearchResponseDTO>>(contentStream);
                 }
                 catch (Exception ex)
                 {
@@ -93,9 +93,7 @@ namespace Api.Controllers
 
         [HttpGet("ListFavCities")]
         public async Task<IActionResult> ListFavCities()
-          => Ok(this.mapper.Map<IEnumerable<CitySelectDTO>>(this.cityRepository.ListFavourites()));
-        
-         
+          => Ok(this.mapper.Map<IEnumerable<CitySelectDTO>>(await this.cityRepository.ListFavourites())); 
         
     }
 }

@@ -6,6 +6,8 @@ using Models.AppSettingsDTOs;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.AddControllers();
  
 builder.Services.AddDbContext<WeatherDbContext>(opt =>
