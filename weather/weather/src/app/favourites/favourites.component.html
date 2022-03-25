@@ -1,1 +1,21 @@
-<p>favourites works!</p>
+<table *ngIf="cities.length>0">
+    <div *ngFor="let city of cities">
+        <p>
+            <span>
+                {{city.cityName}}
+            </span>
+            <span>
+                {{city.celsiusTemperature}}
+            </span>
+        </p>
+        <p>
+            <button type="button" (click)="onRemoveFavoriteClick(city.cityId)">
+                remove favourite
+            </button>
+        </p>
+    </div>
+</table>
+ 
+<div *ngIf="cities.length===0">
+    You have no favourites saved.
+</div>

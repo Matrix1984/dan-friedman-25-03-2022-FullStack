@@ -7,7 +7,7 @@ import { MainComponent } from './main/main.component';
 import { FavouritesComponent } from './favourites/favourites.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms'; 
 
 @NgModule({
   declarations: [
@@ -17,9 +17,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   ],
   imports: [
     CommonModule,  
-    FormsModule,
-    ReactiveFormsModule,
-    BrowserModule, HttpClientModule,
+    FormsModule , 
+    BrowserModule,
+     HttpClientModule,
     RouterModule.forRoot([
       { path: '', component: MainComponent, pathMatch: 'full' }, 
       { path: 'fav', component: FavouritesComponent },  
@@ -30,3 +30,4 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+ 

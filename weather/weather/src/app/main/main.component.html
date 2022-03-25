@@ -1,1 +1,49 @@
-<p>main works!</p>
+<div class="pageContainer">
+    <nav>
+        <a routerLink="fav" >Navgate to favourites</a>
+    </nav>
+    <section>
+        <form #searchFrom="ngForm" (ngSubmit)="onSubmit()">
+            <p>
+                <input type="text" #firstName="ngModel" [(ngModel)]="locationName" name="locationName" />
+            </p>
+            <p>
+                <button type="submit">Search</button>
+            </p>
+            <p *ngIf="formError">
+                {{formError}}
+            </p>
+        </form>
+    </section>
+
+    <section *ngIf="selectedLocationWeatherData" class="weather">
+        <p>
+            {{selectedLocationWeatherData.cityName}}
+        </p>
+        <p>
+            <span>
+                {{selectedLocationWeatherData.celsiusTemperature}}
+            </span>
+            <span>
+                {{selectedLocationWeatherData.weatherText}}
+            </span>
+        </p>
+        <p>
+            <button type="button" (click)="onFavoriteClick(selectedLocationWeatherData.cityId)">
+                Add to favourite
+            </button>
+        </p>
+    </section>
+
+    <section *ngIf="locations.length>0">
+        <table>
+            <tr *ngFor="let location of locations">
+                <td>
+                    <a href="#" (click)="onSelectCityClick(location.key,location.localizedName)">
+                        {{ location.localizedName }}
+                    </a>
+                </td> 
+            </tr>
+        </table>
+    </section>
+</div>

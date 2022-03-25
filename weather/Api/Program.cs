@@ -3,6 +3,7 @@ using Infrastructure.AcuWeatherHttp;
 using Infrastructure.Repositories.CityRepo; 
 using Microsoft.EntityFrameworkCore;
 using Models.AppSettingsDTOs;
+using System.Text.RegularExpressions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +28,17 @@ builder.Services
        .AddOptions<AccurateWeatherOptions>()
        .BindConfiguration("AccurateWeather");
 
-var app = builder.Build(); 
+var app = builder.Build();
+
+app.UseCors(builder => builder
+         .SetIsOriginAllowed(
+            origin =>
+            {
+                return Regex.IsMatch(origin, @"^https?://localhost[^\.]*$");
+            })
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials());
 
 app.UseRouting();
   
