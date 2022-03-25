@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Infrastructure.Repositories.CityRepo;
-using Infrastructure.UnitOfWorks.CityUoW;
+using Infrastructure.AcuWeatherHttp;
+using Infrastructure.Repositories.CityRepo; 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -9,6 +9,7 @@ using Models.DTO.AccuWeatherResponses;
 using Models.DTO.Cities;
 using Models.DTO.Errors;
 using Models.Entities;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 namespace Api.Controllers
@@ -17,43 +18,24 @@ namespace Api.Controllers
     [ApiController]
     public class CityController : ControllerBase
     {
-        private readonly IHttpClientFactory httpClientFactory;
+        private readonly IAcuWeatherHttpService httpService;
 
-        private readonly AccurateWeatherOptions accurateWeatherOptions;
-
-        private readonly ICityCreateUoW cityUoW;
-
-        public readonly IMapper autoMapper;
-        public CityController(ICityRepository cityRepository,
-            IHttpClientFactory httpClientFac,
-            IOptions<AccurateWeatherOptions> ops,
-            ICityCreateUoW cityU,
-            IMapper mapper)
+        private readonly ICityRepository cityRepository;
+        public CityController(IAcuWeatherHttpService acuWeatherHttpService,
+             ICityRepository repo)
         {
-            this.httpClientFactory = httpClientFac;
-            this.accurateWeatherOptions = ops.Value;
-            this.cityUoW = cityU;
-            this.autoMapper = mapper;
+            this.httpService = acuWeatherHttpService;
+            this.cityRepository = repo;
         }
 
-
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> SearchByName(string searchCity)
         {
-            string requestUrl = String.Format("{0}/locations/v1/cities/autocomplete?apikey={1}&q={2}", 
-                 this.accurateWeatherOptions.Url,
-                 this.accurateWeatherOptions.APIkey,
-                 searchCity);
+            LocationSearchResponseDTO locationSearchResponseDTO = null;
+            if (String.IsNullOrWhiteSpace(searchCity))
+                return BadRequest();
 
-            var httpRequestMessage = new HttpRequestMessage(
-             HttpMethod.Get,
-             requestUrl);
-
-            var httpClient = this.httpClientFactory.CreateClient();
-
-            var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
-
-            LocationSearchResponseDTO locations = new LocationSearchResponseDTO();
+            var httpResponseMessage = await this.httpService.SearchByName(searchCity); 
 
             if (httpResponseMessage.IsSuccessStatusCode)
             {
@@ -62,25 +44,46 @@ namespace Api.Controllers
 
                 try
                 {
-                    locations = await JsonSerializer.DeserializeAsync
-                                   <LocationSearchResponseDTO>(contentStream);
+                    locationSearchResponseDTO = await JsonSerializer.DeserializeAsync
+                             <LocationSearchResponseDTO>(contentStream);
                 }
                 catch (Exception ex)
-                { 
+                {
                     return StatusCode(StatusCodes.Status500InternalServerError, new ResponseDTO()
                     {
                         Status = "Error",
-                        Message = "Error fetching the targe cities."
+                        Message = "Error fetching locations."
                     });
-                } 
+                }
+              
+                return Ok(locationSearchResponseDTO);
             }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseDTO()
+                {
+                    Status = "Error",
+                    Message = "Error fetching locations."
+                });
+            }
+        }
 
-            if (locations.Locations.Length == 0)
+        [HttpPatch]
+        public async Task<IActionResult> MakeCityFav([FromQuery]int cityId, [FromBody] CityUpdateDTO dto)
+        {
+            if(cityId==0)
+               return BadRequest("City id is 0.");
+
+           City city= await this.cityRepository.GetById(cityId);
+
+            if (city == null)
                 return NotFound();
 
-            IEnumerable<City> cities = await this.cityUoW.Create(locations);
-              
-            return Ok(this.autoMapper.Map<IEnumerable<CitySelectDTO>>(cities));
+            city.IsFavourite = dto.IsFavourite;
+
+            await this.cityRepository.Update(city);
+
+            return NoContent();
         }
     }
 }

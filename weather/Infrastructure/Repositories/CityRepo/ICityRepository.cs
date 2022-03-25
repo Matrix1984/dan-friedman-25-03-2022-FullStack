@@ -10,6 +10,9 @@ namespace Infrastructure.Repositories.CityRepo
     public interface ICityRepository
     {
         Task Add(City city);
-        Task<City> GetByName(string cityName);
+        Task<City> GetByName(string cityName); 
+        Task<City> GetById(int id); 
+        Task<City> GetByKey(string key);
+        Task Update(City city); 
     }
 }

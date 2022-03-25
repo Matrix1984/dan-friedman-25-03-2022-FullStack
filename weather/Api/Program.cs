@@ -1,8 +1,6 @@
 using Infrastructure;
-using Infrastructure.Repositories.CityRepo;
-using Infrastructure.Repositories.FavouriteRepo;
-using Infrastructure.Repositories.WeatherRepo;
-using Infrastructure.UnitOfWorks.CityUoW;
+using Infrastructure.AcuWeatherHttp;
+using Infrastructure.Repositories.CityRepo; 
 using Microsoft.EntityFrameworkCore;
 using Models.AppSettingsDTOs;
 
@@ -19,14 +17,10 @@ builder.Services.AddDbContext<WeatherDbContext>(opt =>
 
 builder.Services.AddHttpClient();
 
-builder.Services.AddScoped<ICityRepository, CityRepository>();
+builder.Services.AddScoped<ICityRepository, CityRepository>(); 
 
-builder.Services.AddScoped<IWeatherRepository, WeatherRepository>();
-
-builder.Services.AddScoped<IFavouriteRepository, FavouriteRepository>();
-
-builder.Services.AddScoped<ICityCreateUoW, CityCreateUoW>(); 
-
+builder.Services.AddScoped<IAcuWeatherHttpService, AcuWeatherHttpService>();
+ 
 builder.Services
        .AddOptions<AccurateWeatherOptions>()
        .BindConfiguration("AccurateWeather");
