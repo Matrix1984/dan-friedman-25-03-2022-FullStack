@@ -13,6 +13,7 @@ namespace Infrastructure.Repositories.CityRepo
         Task<City> GetByName(string cityName); 
         Task<City> GetById(int id); 
         Task<City> GetByKey(string key);
-        Task Update(City city); 
+        Task Update(City city);
+        Task<IEnumerable<City>> ListFavourites();
     }
 }

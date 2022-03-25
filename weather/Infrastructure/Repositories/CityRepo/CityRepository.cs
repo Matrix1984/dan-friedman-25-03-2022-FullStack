@@ -35,5 +35,12 @@ namespace Infrastructure.Repositories.CityRepo
 
             await this._dbContext.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<City>> ListFavourites()
+        {
+            return await (from n in _dbContext.Cities
+                         where n.IsFavourite
+                         select n).ToArrayAsync();
+        }
     }
 }

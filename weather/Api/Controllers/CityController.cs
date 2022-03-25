@@ -86,5 +86,10 @@ namespace Api.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("ListFavCities")]
+        public async Task<IActionResult> ListFavCities()
+          => Ok(this.cityRepository.ListFavourites());
+        
     }
 }

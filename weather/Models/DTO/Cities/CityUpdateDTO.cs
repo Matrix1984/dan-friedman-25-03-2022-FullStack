@@ -9,7 +9,7 @@ namespace Models.DTO.Cities
 {
     public class CityUpdateDTO
     {
-        [JsonPropertyName("cityId")]
+        [JsonPropertyName("isFavourite")]
         public bool IsFavourite { get; set; }
     }
 }
