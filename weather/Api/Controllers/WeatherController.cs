@@ -32,7 +32,6 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetWeatherByLocation(string cityKey, string cityName)
         {
-
             if (String.IsNullOrWhiteSpace(cityKey) || String.IsNullOrWhiteSpace(cityName))
                 return BadRequest();
 
@@ -48,12 +47,12 @@ namespace Api.Controllers
                 using var contentStream =
                     await httpResponseMessage.Content.ReadAsStreamAsync();
 
-                WeatherConditionsDTO weatherDTO = null;
+                IEnumerable<WeatherConditionsDTO> weatherDTO = null;
 
                 try
                 {
                     weatherDTO = await JsonSerializer.DeserializeAsync
-                                                  <WeatherConditionsDTO>(contentStream);
+                                                  <IEnumerable<WeatherConditionsDTO>>(contentStream);
                 }
                 catch (Exception ex)
                 {
@@ -66,11 +65,12 @@ namespace Api.Controllers
 
                 if (weatherDTO != null)
                 {
+                    WeatherConditionsDTO dto = weatherDTO.First();
                     city = new();
                     city.CityName = cityName;
                     city.CityKey = cityKey;
-                    city.WeatherText = weatherDTO.WeatherConditions[0].WeatherText;
-                    city.CelsiusTemperature = weatherDTO.WeatherConditions[0].Temperature.Metric.Value;
+                    city.WeatherText = dto.WeatherText;
+                    city.CelsiusTemperature = dto.Temperature.Metric.Value;
                     await this.cityRepository.Add(city);
                 }
 

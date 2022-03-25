@@ -5,13 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Models.DTO.AccuWeatherResponses
-{
+{  
     public class WeatherConditionsDTO
-    {
-        public WeatherCondition[] WeatherConditions { get; set; }
-    }
-     
-    public class WeatherCondition
     {
         public DateTime LocalObservationDateTime { get; set; }
         public int EpochTime { get; set; }
@@ -41,14 +36,14 @@ namespace Models.DTO.AccuWeatherResponses
 
     public class Metric
     {
-        public int Value { get; set; }
+        public decimal Value { get; set; }
         public string Unit { get; set; }
         public int UnitType { get; set; }
     }
 
     public class Imperial
     {
-        public int Value { get; set; }
+        public decimal Value { get; set; }
         public string Unit { get; set; }
         public int UnitType { get; set; }
     }
