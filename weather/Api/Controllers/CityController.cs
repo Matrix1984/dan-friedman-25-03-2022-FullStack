@@ -21,11 +21,15 @@ namespace Api.Controllers
         private readonly IAcuWeatherHttpService httpService;
 
         private readonly ICityRepository cityRepository;
+
+        public readonly IMapper mapper;
         public CityController(IAcuWeatherHttpService acuWeatherHttpService,
-             ICityRepository repo)
+             ICityRepository repo,
+            IMapper mapper)
         {
             this.httpService = acuWeatherHttpService;
             this.cityRepository = repo;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -89,7 +93,9 @@ namespace Api.Controllers
 
         [HttpGet("ListFavCities")]
         public async Task<IActionResult> ListFavCities()
-          => Ok(this.cityRepository.ListFavourites());
+          => Ok(this.mapper.Map<IEnumerable<CitySelectDTO>>(this.cityRepository.ListFavourites()));
+        
+         
         
     }
 }
