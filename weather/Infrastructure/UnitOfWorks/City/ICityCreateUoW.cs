@@ -1,0 +1,15 @@
+﻿using Models.DTO.AccuWeatherResponses;
+using Models.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Infrastructure.UnitOfWorks.CityUoW
+{
+    public interface ICityCreateUoW
+    {
+        Task<IEnumerable<City>> Create(LocationSearchResponseDTO data);
+    }
+}

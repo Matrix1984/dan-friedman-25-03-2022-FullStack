@@ -8,11 +8,11 @@ namespace Models.DTO.AccuWeatherResponses
 {
     public class LocationSearchResponseDTO
     {
-        public Class1[] Locations { get; set; }
+        public Location[] Locations { get; set; }
     }
      
 
-    public class Class1
+    public class Location
     {
         public int Version { get; set; }
         public string Key { get; set; }

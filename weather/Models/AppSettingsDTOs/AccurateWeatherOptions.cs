@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Models.AppSettingsDTOs
 {
-    public class AccurateWeatherSettings
+    public class AccurateWeatherOptions
     {
+        public string Url { get; set; }
         public string APIkey { get; set; }
     }
 }
