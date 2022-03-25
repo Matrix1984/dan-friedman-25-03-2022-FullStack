@@ -1,0 +1,33 @@
+.pageContainer{
+    display: grid;
+    gap: 10px;
+    height: 80vw;
+    align-items: center; 
+    grid-template-areas: 
+      "nav  ."
+      "search  search"
+      "main side"
+      "main side";
+   
+}
+
+.site-navigation{
+    grid-area: nav;
+}
+
+.search-bar{
+    grid-area: search;
+    text-align: center;
+    align-self:start;
+}
+
+main{
+    grid-area: main;
+    justify-self: end;
+}
+
+
+aside{
+    grid-area: side;
+    justify-self: end;
+}

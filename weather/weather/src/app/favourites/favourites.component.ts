@@ -20,7 +20,6 @@ export class FavouritesComponent implements OnInit, OnDestroy {
     private favService: FavouriteService) { }
 
   ngOnInit(): void {
-
     this.subs.add(this.http.get<City[]>(`${environment.apiUrl}City/ListFavCities`)
       .subscribe({
         error: (err) => {
@@ -31,8 +30,6 @@ export class FavouritesComponent implements OnInit, OnDestroy {
         }
       }));
   }
-
-
 
   onRemoveFavoriteClick(cityId: number) {
     this.subs.add(this.favService.modifyFavorite(cityId, false).subscribe({
