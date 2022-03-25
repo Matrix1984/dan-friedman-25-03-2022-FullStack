@@ -1,7 +1,23 @@
+using Infrastructure;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-var app = builder.Build();
+builder.Services.AddControllers();
+ 
+builder.Services.AddDbContext<WeatherDbContext>(opt =>
+  opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+    sqlServerOptionsAction: options =>
+    {
+        options.MigrationsAssembly("Api");
+    }));
 
-app.MapGet("/", () => "Hello World!");
+var app = builder.Build(); 
+
+app.UseRouting();
+  
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller}/{action=Index}/{id?}");
 
 app.Run();
